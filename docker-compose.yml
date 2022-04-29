@@ -37,5 +37,6 @@ services:
       - 'POSTGRES_USER=postgres'
       - 'POSTGRES_PASSWORD=postgres'
       #パスワードを設定
+      #ローカル以外でpostgresを使う場合（test環境など）は記入する
       - POSTGRES_HOST_AUTH_METHOD=trust
 

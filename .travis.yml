@@ -1,0 +1,18 @@
+# travis-ciでは初めにアクセス権限の設定をする
+sudo: required
+
+# dockerを使う宣言
+services: docker
+
+#インストールの前にコンテナを起動
+before_install:
+  - docker-compose up --build -d
+
+
+script:
+  #DBの準備
+  - docker-compose exec --env 'RAILS_ENV=test' web rails db:create
+  - docker-compose exec --env 'RAILS_ENV=test' web rails db:migrate
+  #テスト実行
+  - docker-compose exec --env 'RAILS_ENV=test' web rails test
+  
