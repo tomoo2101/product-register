@@ -1,20 +1,14 @@
-name: docker-compose
+name: Action Sample
 
 on:
   push:
-    branches: [ main ]
-
+    branches: 
+      - master
+  workflow_dispatch:
 
 jobs:
-  build:
+  print-hello-world:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-
-      - name: compose-run
-        run: 
-          - docker-compose up --build -d
-          - docker-compose exec --env 'RAILS_ENV=test' web rails db:create
-          - docker-compose exec --env 'RAILS_ENV=test' web rails db:migrate
-          - docker-compose exec --env 'RAILS_ENV=test' web test
+      - name: execute echo command
+        run: echo "Hello World!
