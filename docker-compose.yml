@@ -1,0 +1,41 @@
+#docker buildとrun以降のオプションを記入
+version: '3'
+
+volumes:
+  db-data:
+
+services:
+  web:
+    build: .
+    ports:
+      - '3000:3000'
+    #マウント
+    volumes:
+      - '.:/product-register'
+    environment:
+      - 'DATABASE_PASSWORD=postgres'
+    # -it
+    tty: true
+    stdin_open: true
+    #webをdbに依存させる
+    #upでdb→webの順に起動させる・stpは逆
+    depends_on:
+      - db
+      #dbはwebからアクセス可能であり、bdを使ってアクセスできる
+    links: 
+      - db
+
+
+  db:
+  #dockerhubからppostgresのimageをpullしてくる
+    image: postgres
+    #db-data:がないので上にvolumes:　db-dataと記入する
+    #コンテナを消してしまうとデータベースの内容も消えるのでvolumesを使って別に保存している
+    volumes:
+      - 'db-data:/var/lib/postgresql/data'
+    environment:
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=postgres'
+      #パスワードを設定
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
